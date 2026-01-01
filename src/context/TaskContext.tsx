@@ -25,7 +25,7 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({
     {
       id: uuidv4(),
       title: "Initial Task",
-      status: "todo111",
+      status: "todo",
       priority: "medium",
       createdAt: new Date(),
       description: "This is a sample task to start with",
@@ -56,27 +56,17 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({
     setTasks((prevTasks) => [...prevTasks, newTask]);
   }, []);
 
-  const updateTask = useCallback(
-    (id: string, updates: Partial<Task>) => {
-      setTasks(
-        tasks.map((task) =>
-          task.id === id ? { ...task, ...updates, updatedAt: new Date() } : task
-        )
-      );
-    },
-    [tasks]
-  );
+  const updateTask = useCallback((id: string, updates: Partial<Task>) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === id ? { ...task, ...updates, updatedAt: new Date() } : task
+      )
+    );
+  }, []);
 
-  const deleteTask = useCallback(
-    (id: string) => {
-      const index = tasks.findIndex((task) => task.id === id);
-      if (index !== -1) {
-        tasks.splice(index, 1);
-        setTasks([...tasks]);
-      }
-    },
-    [tasks]
-  );
+  const deleteTask = useCallback((id: string) => {
+    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+  }, []);
 
   const filterTasks = useCallback(
     (status?: Task["status"], priority?: Task["priority"]) => {
